@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import NetInfo from '@react-native-community/netinfo';
 import { Text } from '../../common';
 import { LIMITS } from '../../constants';
-import { NAVIGATION_TO_HOME_SCREEN } from '../../navigation/routes';
+import { NAVIGATION_TO_CATEGORIES_SCREEN } from '../../navigation/routes';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { initializeApp } from '../../store/actions';
@@ -62,7 +62,7 @@ const SplashScreen = ({ initializeApp: _initializeApp, navigation }) => {
   const appStartLogic = () => {
     _initializeApp();
     setTimeout(
-      () => navigation.replace(NAVIGATION_TO_HOME_SCREEN),
+      () => navigation.replace(NAVIGATION_TO_CATEGORIES_SCREEN),
       LIMITS.splashScreenWaitTime,
     );
   };

@@ -12,13 +12,13 @@
  *                           app won't work
  */
 export const magentoOptions = {
-  url: 'http://10.0.2.2/magento2/index.php/', // make sure you have trail slash in the end
-  home_cms_block_id: 19, // required int
+  url: 'http://devm2.bsscommerce.com/magento241/', // make sure you have trail slash in the end
+  home_cms_block_id: 1, // required int
   store: 'default',
   password_reset_template: 'email_reset', // This is required in order to reset password link to work
   authentication: {
     integration: {
-      access_token: 'j9gyfvge3b9cam4w8ckri2jlm8f1a8j5',
+      access_token: 'h138yoeu2rlx52rzg0bqh7xipuuq9foj',
     }
   }
 };

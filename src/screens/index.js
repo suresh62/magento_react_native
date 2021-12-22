@@ -32,7 +32,7 @@ export {
   CategoriesScreen,
   CategoryProductsScreen,
   CheckoutAddressScreen,
-  HomeScreen,
+//  HomeScreen,
   DrawerScreen,
   EditProfileScreen,
   ProductScreen,

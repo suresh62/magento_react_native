@@ -144,4 +144,7 @@ export default magento => ({
       customerData,
       ADMIN_TYPE,
     ),
+
+    getAllProducts : () => magento.get(`/V1/products?searchCriteria[pageSize]=100`,undefined,undefined,ADMIN_TYPE)
+  
 });

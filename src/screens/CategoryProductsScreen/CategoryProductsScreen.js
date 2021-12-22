@@ -8,6 +8,8 @@ import { magento } from '../../magento';
 import { SPACING } from '../../constants';
 import Status from '../../magento/Status';
 import { translate } from '../../i18n';
+import ActionSheet from "react-native-actions-sheet";
+
 
 const columnCount = 2;
 
@@ -104,6 +106,7 @@ const CategoryProductsScreen = ({
 
   return (
     <GenericTemplate status={apiStatus} errorMessage={errorMessage}>
+      <Text>Product....</Text>
       <FlatList
         numColumns={columnCount}
         data={products}

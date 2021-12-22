@@ -1,12 +1,14 @@
 import React, { useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { GenericTemplate, Card, Text, ImageSlider } from '../../common';
+import { GenericTemplate, Card, Text, ImageSlider,ProductListItem } from '../../common';
 import { magento } from '../../magento';
 import FeaturedCategoryList from './FeaturedCategoryList';
 import Status from '../../magento/Status';
 import { DIMENS, SPACING } from '../../constants';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const propTypes = {
   /**
@@ -41,7 +43,12 @@ const defaultProps = {
   errorMessage: '',
 };
 
+const columnCount = 2;
+
 const HomeScreen = ({ status, errorMessage, slider, featuredCategories }) => {
+
+  const [products,setProducts] = useState([]);
+
   const media = useMemo(
     () =>
       slider.map(slide => ({
@@ -49,23 +56,33 @@ const HomeScreen = ({ status, errorMessage, slider, featuredCategories }) => {
       })),
     [slider],
   );
+
+  useEffect(()=>{
+    fetchProducts();
+  },[])
+
+  const fetchProducts = ()=>{
+    magento.admin.getAllProducts().then(response=>{
+      setProducts(response.items);
+    })
+  }
+
+  const renderRow = ({ item }) => (
+    <ProductListItem
+      columnCount={columnCount}
+      product={item}
+      currencySymbol="$"
+      currencyRate={1}
+    />
+  );
+
   return (
-    <GenericTemplate scrollable status={status} errorMessage={errorMessage}>
-      <ImageSlider
-        autoplay
-        containerStyle={styles.imageSliderContainer}
-        media={media}
-        height={DIMENS.homeScreen.sliderHeight}
-      />
-      {Object.keys(featuredCategories).map(key => (
-        <Card type="clear" style={styles.card} key={key}>
-          <Text type="subheading" bold style={styles.title}>
-            {featuredCategories[key].title}
-          </Text>
-          <FeaturedCategoryList categoryId={parseInt(key, 10)} />
-        </Card>
-      ))}
-    </GenericTemplate>
+    <React.Fragment>
+      <FlatList
+        numColumns={columnCount}
+        data={products}
+        renderItem={renderRow}/>
+    </React.Fragment>
   );
 };
 

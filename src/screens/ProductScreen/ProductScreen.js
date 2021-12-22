@@ -5,8 +5,9 @@ import React, {
   useState,
   useRef,
   useCallback,
+  useMemo
 } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet,Text,TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Share from 'react-native-share';
@@ -18,6 +19,7 @@ import {
   Button,
   HeaderButtons,
   ModalSelect,
+  DateTimePicker
 } from '../../common';
 import Status from '../../magento/Status';
 import { magento } from '../../magento';
@@ -44,6 +46,8 @@ import {
 } from '../../utils/products';
 import ProductDescription from './ProductDescription';
 import { productType, isObject, isNonEmptyString } from '../../utils';
+import ActionSheet from "react-native-actions-sheet";
+
 
 const propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
@@ -103,8 +107,24 @@ const ProductScreen = ({
   });
   const [optionContainerYCord, setOptionContainerYCord] = useState(0);
   const [addToCartAvailable, setAddToCartAvailable] = useState(true); // In case something went wrong, set false
+  const [productDeliveryDate, setProductDeliveryDate] = useState(new Date());
   const scrollViewRef = useRef();
   const { theme } = useContext(ThemeContext);
+  // ref
+  const bottomSheetRef = useRef();
+  const actionSheetRef = useRef();
+  let actionSheet;
+
+  actionSheetRef.current?.snapToOffset(200);
+
+
+  // variables
+  const snapPoints = useMemo(() => ['25%', '50%'], []);
+
+  // callbacks
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
 
   useEffect(() => {
     if (product.type_id === CONFIGURABLE_TYPE_SK) {
@@ -359,20 +379,25 @@ const ProductScreen = ({
       cartItem: {
         sku,
         qty: quantity,
-        quote_id: cartQuoteId,
+        quote_id: cartQuoteId
+       
       },
     };
     if (product.type_id === CONFIGURABLE_TYPE_SK) {
       request.cartItem.extension_attributes = {};
+      request.cartItem.options = [{
+        "option_id": 5,
+        "option_value": 52
+      }];
       request.cartItem.product_option = {
         extension_attributes: {
-          configurable_item_options: Object.keys(selectedOptions).map(key => ({
-            option_id: key,
-            option_value: selectedOptions[key],
-          })),
+          configurable_item_options: [{
+            "option_id": 5,
+            "option_value": 52
+          }]
         },
       };
-    }
+   }
     magento.customer
       .addItemToCart(request)
       .then(() => {
@@ -389,6 +414,7 @@ const ProductScreen = ({
   };
 
   return (
+    <React.Fragment>
     <GenericTemplate
       assignRef={component => {
         scrollViewRef.current = component;
@@ -458,8 +484,45 @@ const ProductScreen = ({
           ))}
         </GenericTemplate>
       )}
+      <DateTimePicker
+          mode="date"
+         label="Select Delivery Date"
+          onChange={(itemValue)=> {
+           
+          }}
+          //maximumDate={CURRENT_DATE}
+        //  disabled={apiStatus === Status.LOADING}
+        />
       <ProductDescription customAttributes={product[CUSTOM_ATTRIBUTES_SK]} />
+     
     </GenericTemplate>
+     <View
+     style={{
+       justifyContent: "center",
+       flex: 1,
+       position:'absolute',
+       height:'100%',
+       width:'100%',
+     }}
+   >
+     <TouchableOpacity
+       onPress={() => {
+        actionSheetRef.current?.snapToOffset(800);
+
+         actionSheetRef.current?.setModalVisible();
+       }}
+     >
+       <Text>Open ActionSheet</Text>
+     </TouchableOpacity>
+
+     <ActionSheet ref={actionSheetRef}>
+       <View style={{height:'60%'}}>
+         <Text>YOUR CUSTOM COMPONENT INSIDE THE ACTIONSHEET</Text>
+       </View>
+     </ActionSheet>
+   </View>
+   </React.Fragment>
+
   );
 };
 

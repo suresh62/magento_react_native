@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState, useEffect, useContext,useRef } from 'react';
+import { StyleSheet, View,TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
 import Text from '../Text/Text';
@@ -15,6 +15,8 @@ import {
 import { ThemeContext } from '../../theme';
 import { productType } from '../../utils';
 import { DIMENS, SPACING, CONFIGURABLE_TYPE_SK } from '../../constants';
+import ActionSheet from "react-native-actions-sheet";
+//import ProductScreen from "../../screens/ProductScreen";
 
 const propTypes = {
   /**
@@ -46,6 +48,8 @@ const defaultProps = {
   columnCount: 1,
 };
 
+
+
 const ProductListItem = ({
   columnCount,
   product,
@@ -58,6 +62,7 @@ const ProductListItem = ({
     basePrice: product.price,
   });
   const navigation = useNavigation();
+  const actionSheetRef = useRef();
 
   useEffect(() => {
     // componentDidMount
@@ -87,16 +92,19 @@ const ProductListItem = ({
     }
   }, [children]);
 
-  const onItemPress = () =>
-    navigation.navigate(NAVIGATION_TO_PRODUCT_SCREEN, {
-      product,
-      children,
-      sku: product.sku,
-      title: product.name,
-    });
+  const onItemPress = () => {
+    actionSheetRef.current?.setModalVisible();
+  }
+    // navigation.navigate(NAVIGATION_TO_PRODUCT_SCREEN, {
+    //   product,
+    //   children,
+    //   sku: product.sku,
+    //   title: product.name,
+    // });
 
   return (
-    <Card
+    <React.Fragment>
+  <Card
       type="outline"
       style={styles.container(theme, columnCount)}
       onPress={onItemPress}
@@ -123,6 +131,33 @@ const ProductListItem = ({
         />
       </View>
     </Card>
+     <View
+     style={{
+       justifyContent: "center",
+       flex: 1,
+       position:'absolute',
+       height:'100%',
+       width:'100%',
+     }}
+   >
+     
+     
+     <ActionSheet ref={actionSheetRef}>
+       <View style={{height:'85%'}}>
+       <Image
+        source={{
+          uri: product
+            ? `${magento.getProductMediaUrl()}`
+            : '',
+        }}
+        style={styles.imageStyle}
+        resizeMode="contain"
+      />
+       </View>
+     </ActionSheet>
+   </View>
+    </React.Fragment>
+  
   );
 };
 

@@ -67,7 +67,7 @@ const PaymentScreen = ({
   }, [orderStatus]);
 
   const placeOrder = () => {
-    if (!paymentCode) return;
+   // if (!paymentCode) return;
 
     const paymentInformation = {
       billingAddress: {
@@ -84,7 +84,7 @@ const PaymentScreen = ({
         email: billingAddress.email,
       },
       paymentMethod: {
-        method: paymentCode,
+        method: "checkmo",
       },
     };
     _placeCartOrder(paymentInformation);

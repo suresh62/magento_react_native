@@ -62,11 +62,10 @@ const ShippingScreen = ({
     );
   };
 
-  const getShippingMethod = () =>
-    shipping.find(item => item.carrier_code === shippingCode);
+  const getShippingMethod = () => {}
 
   const onPress = () => {
-    if (shippingCode) {
+   // if (shippingCode) {
       const address = {
         addressInformation: {
           shipping_address: {
@@ -95,13 +94,13 @@ const ShippingScreen = ({
             lastname: billingAddress.lastname,
             email: billingAddress.email,
           },
-          shipping_method_code: getShippingMethod().method_code,
-          shipping_carrier_code: getShippingMethod().carrier_code,
+          shipping_method_code: "flatrate",
+          shipping_carrier_code: "flatrate",
           extension_attributes: {},
         },
       };
       _addCartShippingInfo(address);
-    }
+   // }
   };
 
   const renderButton = () => (

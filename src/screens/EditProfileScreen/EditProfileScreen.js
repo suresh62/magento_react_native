@@ -190,7 +190,7 @@ const CartScreen = ({
         />
         <DateTimePicker
           mode="date"
-          label={translate('editProfileScreen.setBirthday')}
+          label="Select Delivery Date"
           value={dateOfBirth}
           onChange={setDateOfBirth}
           maximumDate={CURRENT_DATE}

@@ -11,6 +11,7 @@ import {
   NAVIGATION_TO_ALERT_DIALOG,
   NAVIGATION_TO_SETTING_SCREEN,
   NAVIGATION_TO_CATEGORIES_SCREEN,
+  NAVIGATION_TO_PROFILE_SCREEN
 } from '../../navigation/routes';
 import { Button } from '../../common';
 import { logout } from '../../store/actions';
@@ -55,6 +56,11 @@ const DrawerScreen = ({ loggedIn, logout: _logout, navigation }) => {
     });
   }
 
+  const showLoginPrompt = () =>
+  navigation.navigate(NAVIGATION_TO_ALERT_DIALOG, {
+    loginMode: true,
+  });
+
   return (
     <SafeAreaView style={styles.container(theme)}>
       <DrawerHeader navigation={navigation} />
@@ -62,6 +68,34 @@ const DrawerScreen = ({ loggedIn, logout: _logout, navigation }) => {
         title={translate('drawerScreen.shopCategories')}
         icon={{ name: 'appstore-o', type: 'antdesign' }}
         onPress={() => navigation.navigate(NAVIGATION_TO_CATEGORIES_SCREEN)}
+      />
+      <DrawerItem
+        title={translate('common.profile')}
+        icon={{ name: 'user-o', type: 'font-awesome' }}
+        onPress={(e) =>  {
+          if (!loggedIn) {
+            // Prevent default action
+            e.preventDefault();
+            showLoginPrompt();
+          }
+          else{
+            navigation.navigate(NAVIGATION_TO_PROFILE_SCREEN)}
+          }
+        }
+      />
+       <DrawerItem
+        title={translate('common.cart')}
+        icon={{ name: 'cart', type: 'material-community' }}
+        onPress={(e) =>  {
+          if (!loggedIn) {
+            // Prevent default action
+            e.preventDefault();
+            showLoginPrompt();
+          }
+          else{
+            navigation.navigate(NAVIGATION_TO_PROFILE_SCREEN)}
+          }
+        }
       />
       <DrawerItem
         title={translate('settingScreen.title')}

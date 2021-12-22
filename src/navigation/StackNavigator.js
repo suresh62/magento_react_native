@@ -20,6 +20,7 @@ import {
   SettingScreen,
   AddressScreen,
   EditProfileScreen,
+  CategoriesScreen,
 } from '../screens';
 import {
   NAVIGATION_TO_SPLASH_SCREEN,
@@ -40,10 +41,11 @@ import {
   NAVIGATION_TO_SETTING_SCREEN,
   NAVIGATION_TO_ADDRESS_SCREEN,
   NAVIGATION_TO_EDIT_PROFILE_SCREEN,
+  NAVIGATION_TO_CATEGORIES_SCREEN,
 } from './routes';
 import { translate } from '../i18n';
 import { isObject } from '../utils';
-import BottomTabNavigator from './BottomTabNavigator';
+//import BottomTabNavigator from './BottomTabNavigator';
 
 const Stack = createStackNavigator();
 
@@ -67,7 +69,23 @@ const StackNavigator = () => {
           header: () => null,
         }}
       />
-      <Stack.Screen
+      <Stack.Screen 
+      component={CategoriesScreen}
+      name={NAVIGATION_TO_CATEGORIES_SCREEN}
+      options={({ navigation }) => ({
+        title: translate('homeScreen.title'),
+        headerLeft: () => (
+          <HeaderButtons>
+            <HeaderButtons.Item
+              title={translate('homeScreen.menu.drawer')}
+              iconName="menu"
+              onPress={() => navigation.toggleDrawer()}
+            />
+          </HeaderButtons>
+        )})
+        }
+      />
+      {/* <Stack.Screen
         component={BottomTabNavigator}
         name={NAVIGATION_TO_HOME_SCREEN}
         options={({ navigation }) => ({
@@ -91,7 +109,7 @@ const StackNavigator = () => {
             </HeaderButtons>
           ),
         })}
-      />
+      /> */}
       <Stack.Screen
         name={NAVIGATION_TO_CATEGORY_PRODUCT_LIST_SCREEN}
         component={CategoryProductsScreen}
